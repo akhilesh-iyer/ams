@@ -143,6 +143,9 @@ class Ui_enrollWindow(object):
         self.mid.setText(_translate("enrollWindow", "MID  :"))
         self.infoLine.setText(_translate("enrollWindow", "Press enroll button to \nstore your photo in DB"))
 
+    def resetLabel(self):
+        self.result.setText('')
+
     def enrollFace(self):
         try:
             mid = int(self.midLine.text())
@@ -161,6 +164,10 @@ class Ui_enrollWindow(object):
             self.result.setFont(self.font)
             self.result.setPalette(palette)
             self.result.setText("Successful !")
+            self.delay = QTimer()
+            self.delay.start(1500)
+            self.delay.timeout.connect(self.resetLabel)
+
         except ValueError:
             palette = QtGui.QPalette()
             brush = QtGui.QBrush(QtGui.QColor(255, 0, 0))
@@ -169,6 +176,9 @@ class Ui_enrollWindow(object):
             self.result.setFont(self.font)
             self.result.setPalette(palette)
             self.result.setText("  Failed !")
+            self.delay = QTimer()
+            self.delay.start(1500)
+            self.delay.timeout.connect(self.resetLabel)
         except cv2.error:
             palette = QtGui.QPalette()
             brush = QtGui.QBrush(QtGui.QColor(255, 0, 0))
@@ -177,6 +187,9 @@ class Ui_enrollWindow(object):
             self.result.setFont(self.font)
             self.result.setPalette(palette)
             self.result.setText("  Failed !")
+            self.delay = QTimer()
+            self.delay.start(1500)
+            self.delay.timeout.connect(self.resetLabel)
 
     def __init__(self):
         super().__init__()
@@ -374,6 +387,9 @@ class Ui_authWindow(object):
         self.retranslateUi(authWindow)
         QtCore.QMetaObject.connectSlotsByName(authWindow)
         self.doneButton.clicked.connect(self.storeAuth)
+    
+    def resetLabel(self):
+        self.result.setText('')
 
     def storeAuth(self):
         if self.keyLine.text() == '12345':
@@ -383,6 +399,10 @@ class Ui_authWindow(object):
             self.result.setFont(self.font)
             self.result.setPalette(self.palette)
             self.result.setText("Wrong key!")
+            self.delay = QTimer()
+            self.delay.start(1500)
+            self.delay.timeout.connect(self.resetLabel)
+
 
     def retranslateUi(self, authWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -448,6 +468,9 @@ class Ui_attendWindow(object):
         self.label.setText(_translate("attendWindow", "Show your face and press \nverify"))
         self.quitButton.setText(_translate("attendWindow", "Quit"))
         self.verifyButton.setText(_translate("attendWindow", "Verify"))
+    
+    def resetLabel(self):
+        self.result.setText('')
 
     def __init__(self):
         super().__init__()
@@ -511,6 +534,9 @@ class Ui_attendWindow(object):
             self.result.setFont(self.font)
             self.result.setPalette(palette)
             self.result.setText("Successfully marked \n" + "     " + str(prediction[0]) + ' !')
+            self.delay = QTimer()
+            self.delay.start(1500)
+            self.delay.timeout.connect(self.resetLabel)
             df = pd.read_csv('C:/Users/Mi Notebook/Desktop/AMS/Shared/tableData.csv')
             sub = df.iloc[0, 0]
             path = df.iloc[0, 1]
@@ -521,7 +547,6 @@ class Ui_attendWindow(object):
                 if str(prediction[0]) == str(mid):
                     df.loc[mid, col] = 1
             df.to_excel(path,index=False)
-
         except cv2.error:
             palette = QtGui.QPalette()
             brush = QtGui.QBrush(QtGui.QColor(255, 0, 0))
@@ -530,6 +555,9 @@ class Ui_attendWindow(object):
             self.result.setFont(self.font)
             self.result.setPalette(palette)
             self.result.setText("  Failed to mark !")
+            self.delay = QTimer()
+            self.delay.start(1500)
+            self.delay.timeout.connect(self.resetLabel)
 
 if __name__ == "__main__":
     import sys
